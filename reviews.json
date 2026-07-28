@@ -70,5 +70,61 @@
         "review_id": "r1785129902672",
         "timestamp": "2026-07-27T08:55:02",
         "username": "user"
+    },
+    {
+        "book_id": "b001",
+        "comment": "بد نبود",
+        "rating": 3,
+        "review_id": "r1785216193074",
+        "timestamp": "2026-07-28T08:53:13",
+        "username": "amir"
+    },
+    {
+        "book_id": "b1785081167220",
+        "comment": "خیلییییی خوب بودددد",
+        "rating": 4,
+        "review_id": "r1785216250538",
+        "timestamp": "2026-07-28T08:54:10",
+        "username": "amir"
+    },
+    {
+        "book_id": "b1785080252768",
+        "comment": "خیلی مسخره",
+        "rating": 1,
+        "review_id": "r1785217522409",
+        "timestamp": "2026-07-28T09:15:53",
+        "username": "amir"
+    },
+    {
+        "book_id": "b1785078152610",
+        "comment": "زیبااااااا",
+        "rating": 4,
+        "review_id": "r1785217639785",
+        "timestamp": "2026-07-28T09:17:19",
+        "username": "amir"
+    },
+    {
+        "book_id": "b006",
+        "comment": "جالب بود",
+        "rating": 3,
+        "review_id": "r1785219216838",
+        "timestamp": "2026-07-28T09:43:36",
+        "username": "sarina"
+    },
+    {
+        "book_id": "b001",
+        "comment": "خوب",
+        "rating": 2,
+        "review_id": "r1785219457847",
+        "timestamp": "2026-07-28T09:47:37",
+        "username": "sarina"
+    },
+    {
+        "book_id": "b1784964338453",
+        "comment": "عالیییییی",
+        "rating": 4,
+        "review_id": "r1785222071107",
+        "timestamp": "2026-07-28T10:31:11",
+        "username": "sara"
     }
 ]

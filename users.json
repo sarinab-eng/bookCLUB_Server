@@ -172,13 +172,20 @@
             "ماجراجویی",
             "عاشقانه"
         ],
+        "favorites": [
+            "b1784731473531"
+        ],
         "firstLogin": false,
         "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
         "personalLibrary": [
             "b1784794274579",
             "b001",
             "b003",
-            "b005"
+            "b005",
+            "b006",
+            "b003",
+            "b1784731389841",
+            "b1784798967017"
         ],
         "readingProgress": {
             "b001": 11,
@@ -260,12 +267,16 @@
             "فلسفه",
             "عاشقانه"
         ],
+        "favorites": [
+            "b1784964823117"
+        ],
         "firstLogin": false,
         "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
         "personalLibrary": [
             "b005",
             "b1784962670639",
-            "b1784786945491"
+            "b1784786945491",
+            "b1784964338453"
         ],
         "readingProgress": {
             "b005": 1
@@ -302,10 +313,23 @@
             "ماجراجویی",
             "زندگی‌نامه"
         ],
+        "favorites": [
+            "b1785077681066"
+        ],
         "firstLogin": false,
         "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
         "personalLibrary": [
+            "b1785077681066",
+            "b1784963532775",
+            "b001",
+            "b1785081167220",
+            "b1785081167220",
+            "b003",
+            "b005"
         ],
+        "readingProgress": {
+            "b1785081167220": 2
+        },
         "registration_date": "2026/07/26",
         "role": "Customer",
         "securityAnswer": "AQ==",

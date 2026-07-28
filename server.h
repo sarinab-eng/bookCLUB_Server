@@ -29,6 +29,7 @@ private slots:
     void disconnected();
     void handleGetUsers(QTcpSocket* socket);
 
+
 private:
     // بافر ورودی هر کلاینت؛ چون چند پیام JSON پشت‌سرهم می‌توانند در یک بسته‌ی
     // TCP به هم بچسبند، پیام‌ها با کاراکتر '\n' جدا می‌شوند و اینجا تا رسیدن
@@ -41,6 +42,19 @@ private:
     // به تمام کاربران متصل، نه فقط کسی که درخواست را فرستاده
     QList<QTcpSocket*> m_clients;
     void broadcastReviewsUpdate(const QString &bookId);
+
+    // متد کمکی برای ذخیره نوتیفیکیشن جدید در فایل notifications.json
+    void saveNotificationToFile(const QString &username, const QString &title, const QString &message);
+
+    // هندرها برای درخواست‌های کلاینت
+    void handleGetNotifications(QTcpSocket *socket, const QJsonObject &request);
+    void handleMarkNotificationAsRead(QTcpSocket *socket, const QJsonObject &request);
+
+
+    void sendNotificationToPublisher(const QString &publisher, const QString &title, const QString &message);
+
+
+
 
     // --- Auth / User management ---
     void handleLogin(QTcpSocket* socket, const QJsonObject& data);

@@ -17,5 +17,173 @@
         ],
         "total": 600000,
         "username": "sarina"
+    },
+    {
+        "date": "2026-07-28T08:50:53",
+        "discountAmount": 16000,
+        "finalAmount": 304000,
+        "items": [
+            {
+                "book_id": "b1785077681066",
+                "quantity": 1,
+                "username": "amir"
+            }
+        ],
+        "total": 320000,
+        "username": "amir"
+    },
+    {
+        "date": "2026-07-28T08:51:36",
+        "discountAmount": 0,
+        "finalAmount": 499000,
+        "items": [
+            {
+                "book_id": "b1784963532775",
+                "quantity": 1,
+                "username": "amir"
+            }
+        ],
+        "total": 499000,
+        "username": "amir"
+    },
+    {
+        "date": "2026-07-28T08:51:57",
+        "discountAmount": 14400,
+        "finalAmount": 105600,
+        "items": [
+            {
+                "book_id": "b001",
+                "quantity": 1,
+                "username": "amir"
+            }
+        ],
+        "total": 120000,
+        "username": "amir"
+    },
+    {
+        "date": "2026-07-28T08:54:17",
+        "discountAmount": 50150,
+        "finalAmount": 244850,
+        "items": [
+            {
+                "book_id": "b1785081167220",
+                "quantity": 1,
+                "username": "amir"
+            }
+        ],
+        "total": 295000,
+        "username": "amir"
+    },
+    {
+        "date": "2026-07-28T08:59:35",
+        "discountAmount": 50150,
+        "finalAmount": 244850,
+        "items": [
+            {
+                "book_id": "b1785081167220",
+                "quantity": 1,
+                "username": "amir"
+            }
+        ],
+        "total": 295000,
+        "username": "amir"
+    },
+    {
+        "date": "2026-07-28T09:18:21",
+        "discountAmount": 0,
+        "finalAmount": 150000,
+        "items": [
+            {
+                "book_id": "b003",
+                "quantity": 1,
+                "username": "amir"
+            }
+        ],
+        "total": 150000,
+        "username": "amir"
+    },
+    {
+        "date": "2026-07-28T09:18:49",
+        "discountAmount": 67500,
+        "finalAmount": 382500,
+        "items": [
+            {
+                "book_id": "b005",
+                "quantity": 1,
+                "username": "amir"
+            }
+        ],
+        "total": 450000,
+        "username": "amir"
+    },
+    {
+        "date": "2026-07-28T09:43:18",
+        "discountAmount": 0,
+        "finalAmount": 300000,
+        "items": [
+            {
+                "book_id": "b006",
+                "quantity": 1,
+                "username": "sarina"
+            }
+        ],
+        "total": 300000,
+        "username": "sarina"
+    },
+    {
+        "date": "2026-07-28T09:47:07",
+        "discountAmount": 0,
+        "finalAmount": 150000,
+        "items": [
+            {
+                "book_id": "b003",
+                "quantity": 1,
+                "username": "sarina"
+            }
+        ],
+        "total": 150000,
+        "username": "sarina"
+    },
+    {
+        "date": "2026-07-28T10:18:16",
+        "discountAmount": 112000,
+        "finalAmount": 448000,
+        "items": [
+            {
+                "book_id": "b1784731389841",
+                "quantity": 1,
+                "username": "sarina"
+            }
+        ],
+        "total": 560000,
+        "username": "sarina"
+    },
+    {
+        "date": "2026-07-28T10:21:44",
+        "discountAmount": 140000,
+        "finalAmount": 140000,
+        "items": [
+            {
+                "book_id": "b1784798967017",
+                "quantity": 1,
+                "username": "sarina"
+            }
+        ],
+        "total": 280000,
+        "username": "sarina"
+    },
+    {
+        "date": "2026-07-28T10:31:29",
+        "discountAmount": 0,
+        "finalAmount": 840000,
+        "items": [
+            {
+                "book_id": "b1784964338453",
+                "quantity": 1,
+                "username": "sara"
+            }
+        ],
+        "total": 840000,
+        "username": "sara"
     }
 ]

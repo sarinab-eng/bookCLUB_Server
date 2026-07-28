@@ -14,9 +14,9 @@
         "isNew": true,
         "isPopular": true,
         "price": 120000,
-        "publisher": "امیرکبیر",
+        "publisher": "test3",
         "publisherUsername": "test3",
-        "stock": 22,
+        "stock": 21,
         "title": "بوف کور"
     },
     {
@@ -34,9 +34,9 @@
         "isNew": true,
         "isPopular": true,
         "price": 150000,
-        "publisher": "نیلوفر",
+        "publisher": "test3",
         "publisherUsername": "test3",
-        "stock": 13,
+        "stock": 11,
         "title": "صد سال تنهایی"
     },
     {
@@ -74,9 +74,9 @@
         "isNew": false,
         "isPopular": true,
         "price": 450000,
-        "publisher": "چشمه",
+        "publisher": "test3",
         "publisherUsername": "test3",
-        "stock": 56,
+        "stock": 55,
         "title": "شازده کوچولو"
     },
     {
@@ -94,9 +94,9 @@
         "isNew": false,
         "isPopular": false,
         "price": 300000,
-        "publisher": "نگاه",
+        "publisher": "test3",
         "publisherUsername": "test3",
-        "stock": 10,
+        "stock": 9,
         "title": "تاریخ ایران باستان"
     },
     {
@@ -116,7 +116,7 @@
         "price": 560000,
         "publisher": "publisher",
         "publisherUsername": "publisher",
-        "stock": 999999,
+        "stock": 999998,
         "title": "بر باد رفته"
     },
     {
@@ -124,7 +124,7 @@
         "averageRating": 0,
         "coverImage": "../../../../images/i013.jpg",
         "description": "",
-        "discountPercent": 0,
+        "discountPercent": 10,
         "fileURL": "../../../../books/bookCLUB.pdf",
         "genre": "کودک و نوجوان",
         "id": "b1784731473531",
@@ -236,7 +236,7 @@
         "price": 280000,
         "publisher": "publisher",
         "publisherUsername": "publisher",
-        "stock": 999999,
+        "stock": 999998,
         "title": "بازگشت ساحره"
     },
     {
@@ -536,7 +536,7 @@
         "price": 499000,
         "publisher": "publisher2",
         "publisherUsername": "publisher2",
-        "stock": 999999,
+        "stock": 999998,
         "title": "بخش دی"
     },
     {
@@ -556,7 +556,7 @@
         "price": 840000,
         "publisher": "publisher",
         "publisherUsername": "publisher",
-        "stock": 999999,
+        "stock": 999998,
         "title": "دسته چهارم"
     },
     {
@@ -584,7 +584,7 @@
         "averageRating": 0,
         "coverImage": "../../../../images/i036.jpg",
         "description": "کتاب جین ایر به عنوان یک رمان کلاسیک بسیار مورد تحسین قرار گرفته است. داستان عاشقانه و جذاب این کتاب بسیاری از خوانندگان را تحت تاثیر قرار داده است",
-        "discountPercent": 0,
+        "discountPercent": 20,
         "fileURL": "../../../../books/bookCLUB.pdf",
         "genre": "عاشقانه",
         "id": "b1784964549844",
@@ -644,7 +644,7 @@
         "averageRating": 0,
         "coverImage": "../../../../images/i039.jpg",
         "description": "",
-        "discountPercent": 0,
+        "discountPercent": 5,
         "fileURL": "../../../../books/bookCLUB.pdf",
         "genre": "رمان",
         "id": "b1784964823117",
@@ -864,7 +864,7 @@
         "averageRating": 0,
         "coverImage": "../../../../images/i044.jpg",
         "description": "داستانی هیجان انگیز",
-        "discountPercent": 5,
+        "discountPercent": 7,
         "fileURL": "../../../../books/bookCLUB.pdf",
         "genre": "ماجراجویی",
         "id": "b1785077681066",
@@ -876,7 +876,7 @@
         "price": 320000,
         "publisher": "test3",
         "publisherUsername": "test3",
-        "stock": 999999,
+        "stock": 999998,
         "title": "اجاره نشین"
     },
     {
@@ -936,7 +936,7 @@
         "price": 295000,
         "publisher": "test3",
         "publisherUsername": "test3",
-        "stock": 999999,
+        "stock": 999997,
         "title": "سنگ کاغذ قیچی"
     },
     {
@@ -1038,5 +1038,45 @@
         "publisherUsername": "test3",
         "stock": 999999,
         "title": "خدمتکار"
+    },
+    {
+        "author": "زظطززز",
+        "averageRating": 0,
+        "coverImage": "",
+        "description": "",
+        "discountPercent": 0,
+        "fileURL": "",
+        "genre": "روان‌شناسی",
+        "id": "b1785221465682",
+        "isActive": true,
+        "isBestseller": false,
+        "isFree": true,
+        "isNew": true,
+        "isPopular": false,
+        "price": 0,
+        "publisher": "publisher",
+        "publisherUsername": "publisher",
+        "stock": 999999,
+        "title": "زسزرظ"
+    },
+    {
+        "author": "رسرسرسرس",
+        "averageRating": 0,
+        "coverImage": "",
+        "description": "",
+        "discountPercent": 0,
+        "fileURL": "",
+        "genre": "شعر",
+        "id": "b1785222116319",
+        "isActive": true,
+        "isBestseller": false,
+        "isFree": true,
+        "isNew": true,
+        "isPopular": false,
+        "price": 0,
+        "publisher": "publisher",
+        "publisherUsername": "publisher",
+        "stock": 999999,
+        "title": "ربذسبسر"
     }
 ]

@@ -249,11 +249,18 @@ void Server::processMessage(QTcpSocket* socket, const QJsonObject& json) {
     } else if (type == "toggle_favorite") {
         handleToggleFavorite(socket, json);
     }
+    else if (type == "get_notifications") {
+        handleGetNotifications(socket, json);
+    }else if (type == "mark_notification_read") {
+        handleMarkNotificationAsRead(socket, json);
+    }
+
 }
 
 // ================= Auth handlers =================
 
 void Server::handleLogin(QTcpSocket* socket, const QJsonObject& data) {
+
     QString username = data["username"].toString();
     QString passwordHash = data["password"].toString();
     QJsonArray users = loadUsers();
@@ -870,6 +877,42 @@ void Server::handleCheckout(QTcpSocket* socket, const QJsonObject& data)
     response["finalAmount"] = finalAmount;
     response["message"] = "خرید با موفقیت انجام شد";
     sendResponse(socket, response);
+
+
+    // ارسال نوتیفیکیشن به ناشر برای هر کتاب خریداری‌شده
+    for (const QJsonValue &itemVal : userItems)
+        // ارسال نوتیفیکیشن به ناشر برای هر کتاب خریداری‌شده
+        for (const QJsonValue &itemVal : userItems) {
+            QJsonObject item = itemVal.toObject();
+            // تبدیل مطمئن id به رشته، چه عدد باشد چه string
+            QString bId = item["book_id"].toVariant().toString();
+
+            for (const QJsonValue &bv : books) {
+                QJsonObject bObj = bv.toObject();
+                QString currentBookId = bObj["id"].toVariant().toString();
+
+                if (currentBookId == bId) {
+                    QString bTitle = bObj["title"].toString();
+
+                    // خواندن نام ناشر با حساسیست‌زدایی نسبت به حروف کوچک/بزرگ و فاصله‌ها
+                    QString publisherName = bObj["publisher"].toString().trimmed();
+                    if (publisherName.isEmpty()) {
+                        publisherName = bObj["author"].toString().trimmed();
+                    }
+
+                    if (!publisherName.isEmpty()) {
+                        sendNotificationToPublisher(
+                            publisherName,
+                            "فروش جدید 💰",
+                            QString("کتاب «%1» توسط کاربر %2 خریداری شد.").arg(bTitle, username)
+                            );
+                    }
+                    break;
+                }
+            }
+        }
+
+
 }
 void Server::saveBooks(const QJsonArray &books) {
     QFile file(BOOKS_FILE);
@@ -878,7 +921,7 @@ void Server::saveBooks(const QJsonArray &books) {
         file.close();
     }
 }
-                  //دریافت کتابخانه شخصی کاربر
+//دریافت کتابخانه شخصی کاربر
 void Server::handleGetLibrary(QTcpSocket* socket, const QJsonObject& data)
 {
     QString username = data["username"].toString();
@@ -1049,6 +1092,7 @@ void Server::handlePostReview(QTcpSocket* socket, const QJsonObject& data) {
         }
     }
 
+
     QJsonObject newReview;
     newReview["review_id"] = "r" + QString::number(QDateTime::currentMSecsSinceEpoch());
     newReview["book_id"] = bookId;
@@ -1064,6 +1108,25 @@ void Server::handlePostReview(QTcpSocket* socket, const QJsonObject& data) {
     response["message"] = "نظر شما ثبت شد";
     sendResponse(socket, response);
     socket->flush();
+
+    // --- اضافه شده برای ارسال نوتیفیکیشن به ناشر ---
+    QJsonArray books = loadBooks();
+    for (const QJsonValue &v : books) {
+        QJsonObject b = v.toObject();
+        if (b["id"].toString() == bookId) {
+            QString pub = b["publisher"].toString();
+            if (pub.isEmpty()) pub = b["author"].toString();
+            if (!pub.isEmpty()) {
+                sendNotificationToPublisher(
+                    pub,
+                    "دیدگاه جدید 💬",
+                    QString("کاربر «%1» برای کتاب «%2» نظر جدیدی ثبت کرد.").arg(username, b["title"].toString())
+                    );
+            }
+            break;
+        }
+    }
+    // ------------------------------------------------
 
     broadcastReviewsUpdate(bookId);
 }
@@ -1162,6 +1225,7 @@ void Server::handleGetReviews(QTcpSocket* socket, const QJsonObject& data) {
 
     sendResponse(socket, response);
     socket->flush();
+
 }
 
 // ================= Saved books (wishlist) =================
@@ -1640,8 +1704,8 @@ void Server::handleSetBookActive(QTcpSocket* socket, const QJsonObject& data, bo
 
         response["success"] = true;
         response["message"] = active
-            ? "کتاب دوباره فعال شد"
-            : "کتاب از فروشگاه حذف شد (کاربرانی که قبلاً خریده‌اند همچنان دسترسی دارند)";
+                                  ? "کتاب دوباره فعال شد"
+                                  : "کتاب از فروشگاه حذف شد (کاربرانی که قبلاً خریده‌اند همچنان دسترسی دارند)";
         sendResponse(socket, response);
         return;
     }
@@ -1713,7 +1777,6 @@ void Server::handleGetPublisherStats(QTcpSocket* socket, const QJsonObject& data
         bookStats.append(stat);
     }
 
-    // مرتب‌سازی بر اساس تعداد فروش برای استخراج پرفروش‌ترین/کم‌فروش‌ترین
     QList<QJsonObject> sorted;
     for (const QJsonValue &v : bookStats) sorted.append(v.toObject());
     std::sort(sorted.begin(), sorted.end(), [](const QJsonObject &a, const QJsonObject &b) {
@@ -1736,8 +1799,6 @@ void Server::handleGetPublisherStats(QTcpSocket* socket, const QJsonObject& data
 
 // ================= پنل مدیر: نظارت بر کتاب‌ها و نظرات =================
 
-// برخلاف handleGetBooks (که مخصوص فروشگاهه و کتاب‌های غیرفعال رو حذف می‌کنه)،
-// مدیر سیستم باید همه‌ی کتاب‌ها رو ببینه، فعال یا غیرفعال، تا بتونه محتوا رو کنترل کنه
 void Server::handleAdminGetBooks(QTcpSocket* socket) {
     QJsonArray books = enrichBooksWithRatings(loadBooks());
 
@@ -1747,8 +1808,6 @@ void Server::handleAdminGetBooks(QTcpSocket* socket) {
     sendResponse(socket, response);
 }
 
-// برخلاف handleUpdateBook (که فقط اجازه‌ی ویرایش کتاب‌های خودِ ناشر رو می‌ده)،
-// مدیر سیستم می‌تواند اطلاعات هر کتابی رو در سامانه ویرایش کند
 void Server::handleAdminUpdateBook(QTcpSocket* socket, const QJsonObject& data) {
     QString bookId = data["book_id"].toString();
 
@@ -1783,8 +1842,6 @@ void Server::handleAdminUpdateBook(QTcpSocket* socket, const QJsonObject& data) 
     sendResponse(socket, response);
 }
 
-// حذف کتاب توسط مدیر سیستم قطعی و دائمیه (برخلاف غیرفعال‌سازی موقت توسط ناشر)؛
-// طبق اسپک برای کتاب‌های نامعتبر یا مغایر با قوانین استفاده می‌شود
 void Server::handleAdminDeleteBook(QTcpSocket* socket, const QJsonObject& data) {
     QString bookId = data["book_id"].toString();
 
@@ -1838,7 +1895,6 @@ void Server::handleAdminGetReviews(QTcpSocket* socket) {
     sendResponse(socket, response);
 }
 
-// حذف نظر توسط مدیر سیستم، صرف‌نظر از اینکه چه کاربری آن را ثبت کرده (نظارت بر محتوا)
 void Server::handleAdminDeleteReview(QTcpSocket* socket, const QJsonObject& data) {
     QString reviewId = data["review_id"].toString();
 
@@ -1872,7 +1928,6 @@ void Server::handleAdminDeleteReview(QTcpSocket* socket, const QJsonObject& data
     if (found) broadcastReviewsUpdate(bookId);
 }
 
-// ارسال اعلان به یک سوکت مشخص
 void Server::sendNotification(QTcpSocket* socket, const QString& title, const QString& message) {
     if (!socket || socket->state() != QAbstractSocket::ConnectedState)
         return;
@@ -1883,13 +1938,12 @@ void Server::sendNotification(QTcpSocket* socket, const QString& title, const QS
     notif["message"] = message;
 
     QJsonDocument doc(notif);
-    QByteArray data = doc.toJson(QJsonDocument::Compact) + "\n"; // انتهای آن \n لازم است تا onReadyRead کلاینت خط را تشخیص دهد
+    QByteArray data = doc.toJson(QJsonDocument::Compact) + "\n";
 
     socket->write(data);
     socket->flush();
 }
 
-// ارسال اعلان به تمام سوکت‌های متصل (مثلاً هنگام ثبت کتاب جدید)
 void Server::broadcastNotification(const QString& title, const QString& message) {
     for (QTcpSocket* socket : m_buffers.keys()) {
         sendNotification(socket, title, message);
@@ -1946,14 +2000,12 @@ void Server::sendDiscountNotification(const QString& bookId, const QString& book
         QString targetUsername = userObj["username"].toString();
         bool isInterested = false;
 
-        // بررسی در لیست علاقه‌مندی‌ها
         QJsonArray favorites = userObj["favorites"].toArray();
         for (const QJsonValue& f : favorites) {
             if (f.isString() && f.toString() == bookId) { isInterested = true; break; }
             if (f.isObject() && f.toObject()["id"].toString() == bookId) { isInterested = true; break; }
         }
 
-        // بررسی در لیست کتاب‌های ذخیره‌شده
         if (!isInterested) {
             QJsonArray savedBooks = userObj["savedBooks"].toArray();
             for (const QJsonValue& s : savedBooks) {
@@ -1962,7 +2014,6 @@ void Server::sendDiscountNotification(const QString& bookId, const QString& book
             }
         }
 
-        // اگر کتاب در لیست کاربر بود، ارسال اعلان به سوکت فعال او
         if (isInterested) {
             for (QTcpSocket* clientSocket : m_clients) {
                 if (clientSocket && clientSocket->state() == QAbstractSocket::ConnectedState) {
@@ -1995,7 +2046,6 @@ void Server::handleToggleFavorite(QTcpSocket* socket, const QJsonObject& data) {
             QJsonArray favorites = user["favorites"].toArray();
             bool exists = false;
 
-            // بررسی وجود کتاب در لیست و حذف آن (در صورت وجود)
             for (int j = 0; j < favorites.size(); ++j) {
                 if (favorites[j].toString() == bookId) {
                     favorites.removeAt(j);
@@ -2004,7 +2054,6 @@ void Server::handleToggleFavorite(QTcpSocket* socket, const QJsonObject& data) {
                 }
             }
 
-            // اگر نبود، اضافه شود
             if (!exists) {
                 favorites.append(bookId);
                 response["action"] = "added";
@@ -2027,4 +2076,105 @@ void Server::handleToggleFavorite(QTcpSocket* socket, const QJsonObject& data) {
 
     response["success"] = false;
     sendResponse(socket, response);
+}
+
+void Server::saveNotificationToFile(const QString &username, const QString &title, const QString &message) {
+    QFile file("notifications.json");
+    QJsonArray notifArray;
+
+    if (file.open(QIODevice::ReadOnly)) {
+        QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+        if (doc.isArray()) {
+            notifArray = doc.array();
+        }
+        file.close();
+    }
+
+    QJsonObject newNotif;
+    newNotif["id"] = QUuid::createUuid().toString(); // شناسه یکتا برای هر اعلان
+    newNotif["username"] = username;
+    newNotif["title"] = title;
+    newNotif["message"] = message;
+    newNotif["isRead"] = false;
+    newNotif["date"] = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm");
+
+    notifArray.append(newNotif);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        file.write(QJsonDocument(notifArray).toJson());
+        file.close();
+    }
+}
+
+void Server::handleGetNotifications(QTcpSocket *socket, const QJsonObject &request) {
+    QString username = request["username"].toString();
+    QJsonArray userNotifs;
+
+    QFile file("notifications.json");
+    if (file.open(QIODevice::ReadOnly)) {
+        QJsonArray allNotifs = QJsonDocument::fromJson(file.readAll()).array();
+        file.close();
+
+        for (const QJsonValue &val : allNotifs) {
+            QJsonObject obj = val.toObject();
+            if (obj["username"].toString() == username) {
+                userNotifs.append(obj);
+            }
+        }
+    }
+
+    QJsonObject response;
+    response["type"] = "get_notifications_response";
+    response["status"] = "success";
+    response["notifications"] = userNotifs;
+    sendResponse(socket, response);
+}
+
+void Server::handleMarkNotificationAsRead(QTcpSocket *socket, const QJsonObject &request) {
+    QString notifId = request["notif_id"].toString();
+    QFile file("notifications.json");
+
+    if (!file.open(QIODevice::ReadOnly)) return;
+    QJsonArray allNotifs = QJsonDocument::fromJson(file.readAll()).array();
+    file.close();
+
+    bool updated = false;
+    for (int i = 0; i < allNotifs.size(); ++i) {
+        QJsonObject obj = allNotifs[i].toObject();
+        if (obj["id"].toString() == notifId) {
+            obj["isRead"] = true;
+            allNotifs[i] = obj;
+            updated = true;
+            break;
+        }
+    }
+
+    if (updated && file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        file.write(QJsonDocument(allNotifs).toJson());
+        file.close();
+    }
+
+    QJsonObject response;
+    response["type"] = "mark_notification_read_response";
+    response["status"] = updated ? "success" : "error";
+    sendResponse(socket, response);
+}
+void Server::sendNotificationToPublisher(const QString &publisher, const QString &title, const QString &message)
+{
+    saveNotificationToFile(publisher, title, message);
+
+    QJsonObject notif;
+    notif["type"] = "notification";
+    notif["title"] = title;
+    notif["message"] = message;
+
+    QByteArray data = QJsonDocument(notif).toJson(QJsonDocument::Compact) + "\n";
+
+    for (QTcpSocket *client : m_clients) {
+        if (client && client->property("username").toString() == publisher) {
+            client->write(data);
+            client->flush();
+            break;
+        }
+    }
 }
